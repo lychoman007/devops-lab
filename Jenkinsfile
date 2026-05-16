@@ -5,9 +5,11 @@ pipeline {
     CI = "true"
     BACKEND_IMAGE = "devops-lab-backend:jenkins"
     FRONTEND_IMAGE = "devops-lab-frontend:jenkins"
+    TELEGRAM_CHAT_ID = "8720333443"
   }
 
   stages {
+
     stage("Checkout") {
       steps {
         checkout scm
@@ -72,6 +74,33 @@ pipeline {
   }
 
   post {
+
+    success {
+      withCredentials([
+        string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_BOT_TOKEN')
+      ]) {
+
+        sh """
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d chat_id="${TELEGRAM_CHAT_ID}" \
+          --data-urlencode text="SUCCESS: ${JOB_NAME} #${BUILD_NUMBER} ${BUILD_URL}"
+        """
+      }
+    }
+
+    failure {
+      withCredentials([
+        string(credentialsId: 'telegram-bot-token', variable: 'TELEGRAM_BOT_TOKEN')
+      ]) {
+
+        sh """
+          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
+          -d chat_id="${TELEGRAM_CHAT_ID}" \
+          --data-urlencode text="FAILED: ${JOB_NAME} #${BUILD_NUMBER} ${BUILD_URL}"
+        """
+      }
+    }
+
     always {
       sh "docker image rm -f ${BACKEND_IMAGE} ${FRONTEND_IMAGE} || true"
     }

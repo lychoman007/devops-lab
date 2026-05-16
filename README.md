@@ -56,6 +56,22 @@ sudo apt install -y trivy
 trivy --version
 ```
 
+## Telegram notifications
+
+The pipeline can send Telegram messages after each build.
+
+1. Create a Telegram bot with `@BotFather`.
+2. Message the bot once from your Telegram account.
+3. Add the bot token to Jenkins credentials as:
+   - `Kind`: `Secret text`
+   - `ID`: `telegram-bot-token`
+4. Replace `REPLACE_WITH_YOUR_CHAT_ID` in `Jenkinsfile` with your real Telegram chat ID.
+
+The pipeline sends:
+
+- a success message when the build passes
+- a failure message when the build fails
+
 ## Jenkins VM idea
 
 Your `Vagrantfile` already defines:
