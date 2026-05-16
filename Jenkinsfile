@@ -49,8 +49,9 @@ pipeline {
 
     stage("Trivy Image Scan") {
       steps {
-        sh "trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress ${BACKEND_IMAGE}"
-        sh "trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress ${FRONTEND_IMAGE}"
+        sh "TRIVY_CACHE_DIR=/tmp/trivy-backend trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress ${BACKEND_IMAGE}"
+
+        sh "TRIVY_CACHE_DIR=/tmp/trivy-frontend trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress ${FRONTEND_IMAGE}"
       }
     }
 
