@@ -35,9 +35,26 @@ The included `Jenkinsfile` does:
 1. Checkout source
 2. Run backend tests
 3. Run frontend tests
-4. Build Docker images
-5. Deploy with Docker Compose
-6. Run a smoke test against `/api/health`
+4. Run a Trivy filesystem scan
+5. Build backend and frontend Docker images for security scanning
+6. Run Trivy image scans
+7. Deploy with Docker Compose on the `app` VM
+8. Run a smoke test against `/api/health`
+
+## Trivy on Jenkins
+
+To use the new scan stages, install Trivy on the `jenkins` VM before running the pipeline.
+
+Example on Ubuntu:
+
+```bash
+sudo apt install -y wget apt-transport-https gnupg lsb-release
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo gpg --dearmor -o /usr/share/keyrings/trivy.gpg
+echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main" | sudo tee /etc/apt/sources.list.d/trivy.list
+sudo apt update
+sudo apt install -y trivy
+trivy --version
+```
 
 ## Jenkins VM idea
 
