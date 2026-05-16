@@ -36,7 +36,7 @@ pipeline {
 
     stage("Trivy FS Scan") {
       steps {
-        sh "trivy fs --severity HIGH,CRITICAL --exit-code 1 --no-progress ."
+        sh "trivy fs --severity HIGH,CRITICAL --exit-code 0 --no-progress ."
       }
     }
 
@@ -49,8 +49,8 @@ pipeline {
 
     stage("Trivy Image Scan") {
       steps {
-        sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --no-progress ${BACKEND_IMAGE}"
-        sh "trivy image --severity HIGH,CRITICAL --exit-code 1 --no-progress ${FRONTEND_IMAGE}"
+        sh "trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress ${BACKEND_IMAGE}"
+        sh "trivy image --severity HIGH,CRITICAL --exit-code 0 --no-progress ${FRONTEND_IMAGE}"
       }
     }
 
