@@ -5,7 +5,7 @@ pipeline {
     CI = "true"
     BACKEND_IMAGE = "devops-lab-backend:jenkins"
     FRONTEND_IMAGE = "devops-lab-frontend:jenkins"
-    TELEGRAM_CHAT_ID = "8720333443"
+    TELEGRAM_CHAT_ID = "1609125267"
   }
 
   stages {
